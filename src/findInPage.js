@@ -15,6 +15,7 @@ const matchCase = Symbol('matchCase')
 
 const documentKeydown = Symbol('documentKeydown')
 const inputFocus = Symbol('inputFocus')
+const inputClick = Symbol('inputClick')
 const inputBlur = Symbol('inputBlur')
 const inputEvent = Symbol('inputEvent')
 const compositionstart = Symbol('compositionstart')
@@ -251,7 +252,11 @@ function creatEventHandler () {
 
   this[inputFocus] = (function () {
     this[findInput].style.border = `1px solid ${this[config].inputFocusColor}`
-    print(`[FindInPage.inputFocus] !this.options.platform=${!this.options.platform}, this.options.platform === 'win32' = ${this.options.platform === 'win32'} `)
+  }).bind(this)
+  this[events].push({ ele: this[findInput], name: 'focus', fn: this[inputFocus] })
+
+  this[inputClick] = (function () {
+    print(`[FindInPage.inputClick] !this.options.platform=${!this.options.platform}, this.options.platform === 'win32' = ${this.options.platform === 'win32'} `)
     if (!this.options.platform || this.options.platform === 'darwin') {
       // Work-around that fixes the issue  https://youtrack.jetbrains.com/issue/SPACE-12770.
       // BrowserView.webContents doesn't gain focus automatically if user click on an input field rendered inside that view.
@@ -261,7 +266,7 @@ function creatEventHandler () {
       });
     }
   }).bind(this)
-  this[events].push({ ele: this[findInput], name: 'focus', fn: this[inputFocus] })
+  this[events].push({ ele: this[findInput], name: 'click', fn: this[inputClick] })
 
   this[inputBlur] = (function () {
     this[findInput].style.border = `1px solid ${this[config].inputBgColor}`
