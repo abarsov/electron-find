@@ -260,6 +260,7 @@ function creatEventHandler () {
 
   this[inputEvent] = (function () {
     updateCnt.call(this)
+    print(`inputEvent. isInputing=${isInputing}`)
     isInputing.call(this)
       .then(res => {
         res ? '' : onInput.call(this)
@@ -372,7 +373,8 @@ function isInputing () {
 }
 
 function focusInput (doBlur = false) {
-  setTimeout(() => { 
+  setTimeout(() => {
+    print(`focusInput, doBlur=${doBlur}`)
     doBlur ? this[findInput].blur() : ''
     this[findInput].focus() 
   }, 50)
@@ -382,6 +384,7 @@ function onInput () {
   setTimeout(() => {
     if (this[inComposition]) return
     this[action] = 'input'
+    print(`calling onInput`)
     let text = this[findInput].value
     if (text && text !== this[lastText]) {
       this[lastText] = text

@@ -1,4 +1,4 @@
-const debug = false
+const debug = true
 
 const on = (() => {
   if (document && document.addEventListener) {
