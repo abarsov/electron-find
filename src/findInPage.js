@@ -256,7 +256,6 @@ function creatEventHandler () {
   this[events].push({ ele: this[findInput], name: 'focus', fn: this[inputFocus] })
 
   this[inputClick] = (function () {
-    print(`[FindInPage.inputClick] !this.options.platform=${!this.options.platform}, this.options.platform === 'win32' = ${this.options.platform === 'win32'} `)
     if (!this.options.platform || this.options.platform === 'darwin') {
       // Work-around that fixes the issue  https://youtrack.jetbrains.com/issue/SPACE-12770.
       // BrowserView.webContents doesn't gain focus automatically if user click on an input field rendered inside that view.
@@ -275,7 +274,6 @@ function creatEventHandler () {
 
   this[inputEvent] = (function () {
     updateCnt.call(this)
-    print(`inputEvent. isInputing=${isInputing}`)
     isInputing.call(this)
       .then(res => {
         res ? '' : onInput.call(this)
@@ -389,7 +387,6 @@ function isInputing () {
 
 function focusInput (doBlur = false) {
   setTimeout(() => {
-    print(`focusInput, doBlur=${doBlur}`)
     doBlur ? this[findInput].blur() : ''
     this[findInput].focus() 
   }, 50)
@@ -399,7 +396,6 @@ function onInput () {
   setTimeout(() => {
     if (this[inComposition]) return
     this[action] = 'input'
-    print(`calling onInput`)
     let text = this[findInput].value
     if (text && text !== this[lastText]) {
       this[lastText] = text
