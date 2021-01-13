@@ -65,9 +65,10 @@ class FindInPage extends Find{
     this.duration = (typeof options.duration === 'number' && options.duration > 0) ? options.duration : 300
     this.options = options
     this.options.preload ? this.initialize() : ''
+    this.ipcRenderer = ipcRenderer
 
     // Subscribe on 'on-find' once for component
-    ipcRenderer.on('on-find', event => {
+    this.ipcRenderer.on('on-find', event => {
       this.print('-> on-find')
       this.openFindWindow()
     });
@@ -250,6 +251,14 @@ function creatEventHandler () {
 
   this[inputFocus] = (function () {
     this[findInput].style.border = `1px solid ${this[config].inputFocusColor}`
+    if (!this.options.platform || this.options.platform === 'darwin') {
+      // Work-around that fixes the issue  https://youtrack.jetbrains.com/issue/SPACE-12770.
+      // BrowserView.webContents doesn't gain focus automatically if user click on an input field rendered inside that view.
+      // Focus should be manually set by handler defined in the main process for channel 'click-inside-find-in-page'
+      this.ipcRenderer.send('click-inside-find-in-page', {
+        windowKey: this.options.windowKey
+      });
+    }
   }).bind(this)
   this[events].push({ ele: this[findInput], name: 'focus', fn: this[inputFocus] })
 
