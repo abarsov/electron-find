@@ -251,6 +251,7 @@ function creatEventHandler () {
 
   this[inputFocus] = (function () {
     this[findInput].style.border = `1px solid ${this[config].inputFocusColor}`
+    print(`[FindInPage.inputFocus] !this.options.platform=${!this.options.platform}, this.options.platform === 'win32' = ${this.options.platform === 'win32'} `)
     if (!this.options.platform || this.options.platform === 'darwin') {
       // Work-around that fixes the issue  https://youtrack.jetbrains.com/issue/SPACE-12770.
       // BrowserView.webContents doesn't gain focus automatically if user click on an input field rendered inside that view.
